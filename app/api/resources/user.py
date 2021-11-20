@@ -1,19 +1,13 @@
 from flask_restful import Resource
 from flask_pydantic import validate
 
-from app.api.schemas.user import UserCreate, UserEdit
+from app.api.schemas.user import UserEdit
 
 
 class UserResource(Resource):
     def get(self, user_id: int):
         """
         Get user profile info
-        """
-
-    @validate()
-    def post(self, user_id: int, user_data: UserCreate):
-        """
-        Create new user
         """
 
     @validate()
