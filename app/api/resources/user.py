@@ -2,8 +2,8 @@ from flask_restful import Resource
 from flask_pydantic import validate
 
 from app.api.schemas.user import UserEdit, UserCreate
-from app.models import User
-from app.models import db
+from app.models import User, db
+from app.api.resources import statistics
 
 
 class UserResource(Resource):
@@ -17,6 +17,10 @@ class UserResource(Resource):
             raise ValueError(f"Username ({data.username}) already exist in database.")
         # Create new user object by calling create function from User class
         user.create(username=data.username, password=data.password)
+
+        # Create statistics object in db for user
+        user = User.query.filter_by(username=data.username).first()
+        statistics.StatisticsResource.post(user_id=user.id)
 
     def get(self, user_id: int):
         """
