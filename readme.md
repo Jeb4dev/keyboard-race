@@ -4,7 +4,7 @@
 This project was made as part of the weekly programming challenge hosted by [DevJam].
 The project was made for learning purposes.
 
-## About the project
+## About the Challenge
 #### 🛠 Difficulty Level: Intermediate 
 📅 Start: November 19th<br>
 📅 Deadline: November 25th 16:00 (4PM) GMT
