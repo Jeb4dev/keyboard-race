@@ -8,6 +8,7 @@ from app.models import db
 
 class StatisticsResource(Resource):
     @staticmethod
+    @validate()
     def post(user_id: int):
         """
         Create new static object
@@ -36,6 +37,7 @@ class StatisticsResource(Resource):
             print(f"User ({user_id}) tried to get Statistics, but user has not statistics with id {data.id}")
 
     @staticmethod
+    @validate()
     def put(user_id: int, data: StatisticsEdit):
         """
         Edit statistics info
