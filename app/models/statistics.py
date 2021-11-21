@@ -6,13 +6,14 @@ class Statistics(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     best_wpm = db.Column(db.Integer, default=0)
+    best_accuracy = db.Column(db.Integer, default=0)
     total_races = db.Column(db.Integer, default=0)
     total_wins = db.Column(db.Integer, default=0)
 
-    average_wpm = db.Column(db.Integer, default=0)  # Average words per minute
-    average_epm = db.Column(db.Integer, default=0)  # Average errors per minute
-    average_accurasy = db.Column(db.Integer, default=0)  # Average Accuracy
-    average_time = db.Column(db.Integer, default=0)  # Average time the challenge took, in seconds
+    average_wpm = db.Column(db.Float, default=0)  # Average words per minute
+    average_epm = db.Column(db.Float, default=0)  # Average errors per minute
+    average_accuracy = db.Column(db.Float, default=0)  # Average Accuracy
+    average_time = db.Column(db.Float, default=0)  # Average time the challenge took, in seconds
 
     races = db.relationship('Race', backref='statistics')
 
