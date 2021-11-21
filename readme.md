@@ -1,6 +1,7 @@
 # Keyboard race
 
-This was made as part of the weekly programming challenge hosted by [DevJam].
+## Purpose
+This project was made as part of the weekly programming challenge hosted by [DevJam].
 The project was made for learning purposes.
 
 ## About the project
@@ -71,3 +72,4 @@ Give feedback, suggest new features, maybe even create pull request.
 tba.
 
    [Flask]: <https://flask.palletsprojects.com/en/2.0.x/>
+   [DevJam]: <https://discord.gg/nZBxGEudY6>
