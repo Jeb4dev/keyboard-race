@@ -69,7 +69,7 @@ Give feedback, suggest new features, maybe even create pull request.
 
 ## License
 
-tba.
+MIT
 
    [Flask]: <https://flask.palletsprojects.com/en/2.0.x/>
    [DevJam]: <https://discord.gg/nZBxGEudY6>
