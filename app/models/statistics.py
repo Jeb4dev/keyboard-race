@@ -16,5 +16,8 @@ class Statistics(db.Model):
 
     races = db.relationship('Race', backref='statistics')
 
+    def __repr__(self):
+        return f"object that contains user statistics. object id: {self.id}"
+
     #  How to get average
     #  https://stackoverflow.com/questions/44397844/sqlalchemy-get-average-of-greatest-n-per-group
