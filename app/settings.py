@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pydantic import BaseSettings
 from functools import lru_cache
 
@@ -7,6 +8,10 @@ class Settings(BaseSettings):
     DEBUG: bool = bool(os.environ.get("DEBUG", True))
     SQLALCHEMY_DATABASE_URI: str = os.environ.get("DATABASE_URL", "sqlite:///app.db")
     SECRET_KEY: str = os.environ.get("SECRET_KEY", "super-secret-key")
+    JWT_SECRET_KEY: str = SECRET_KEY
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 @lru_cache()
