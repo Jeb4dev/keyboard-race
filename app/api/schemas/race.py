@@ -22,10 +22,6 @@ class RaceCreate(BaseRace):
     time: int
 
 
-class RaceGet(BaseRace):
-    id: int
-
-
 class RaceEdit(BaseRace):
     id: int
     ranking: Optional[int]
@@ -34,11 +30,3 @@ class RaceEdit(BaseRace):
     epm: Optional[int]
     accuracy: Optional[int]
     time: Optional[int]
-
-
-class RaceDelete(BaseRace):
-    id: int
-
-
-
-

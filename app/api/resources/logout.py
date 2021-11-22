@@ -14,5 +14,3 @@ class LogoutResource(Resource):
         def unset_cookies(response):
             unset_jwt_cookies(response)
             return response
-
-        return "", 200

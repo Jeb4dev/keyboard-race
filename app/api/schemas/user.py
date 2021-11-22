@@ -3,8 +3,8 @@ from pydantic import BaseModel
 
 
 class BaseUser(BaseModel):
-    id: Optional[int] = None
-    username: Optional[str] = None
+    id: Optional[int]
+    username: Optional[str]
 
 
 class UserCreate(BaseUser):
@@ -13,4 +13,4 @@ class UserCreate(BaseUser):
 
 
 class UserEdit(BaseUser):
-    password: Optional[str] = None
+    password: Optional[str]

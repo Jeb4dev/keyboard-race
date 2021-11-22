@@ -1,33 +1,22 @@
 from flask_restful import Resource
 from flask_pydantic import validate
+from flask_jwt_extended import jwt_required
 
-from app.api.schemas.user import UserEdit, UserCreate
+from app.api.schemas import ErrorResponse
+from app.api.schemas.user import UserEdit
 from app.models import User, db
-from app.api.resources import statistics
+from app.api.jwt import get_current_user
 
 
 class UserResource(Resource):
-    def post(self, data: UserCreate):
-        """
-        Create new race object
-        """
-        # Try get user by username, if username already exist return
-        user = User.query.filter_by(username=data.username).first()
-        if user:
-            raise ValueError(f"Username ({data.username}) already exist in database.")
-        # Create new user object by calling create function from User class
-        user.create(username=data.username, password=data.password)
-
-        # Create statistics object in db for user
-        user = User.query.filter_by(username=data.username).first()
-        statistics.StatisticsResource.post(user_id=user.id)
-
     def get(self, user_id: int):
         """
         Get user profile info
         """
         user = User.query.filter_by(id=user_id).first()
-        return user
+        if user:
+            return user.to_dict(rules=('-password', '-races', '-statistics'))
+        return ErrorResponse(error="User not found").dict(), 404
 
     @validate()
     def put(self, user_id: int, changes: UserEdit):
@@ -40,11 +29,14 @@ class UserResource(Resource):
             user.password_hash = user.generate_password_hash(changes.password)
         db.session.commit()
 
+    @jwt_required()
     def delete(self, user_id: int):
         """
         Delete user profile
         """
-        user = User.query.filter_by(id=user_id).first()
-        # does this also delete sub tables as user.
-        db.session.delete(user)
-        db.session.commit()
+        user = get_current_user()
+        delete_user = User.query.filter_by(id=user_id).first()
+        if user and delete_user and user == delete_user:
+            db.session.delete(user)
+            db.session.commit()
+            db.session.delete(delete_user.statistics)

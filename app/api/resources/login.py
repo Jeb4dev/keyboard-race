@@ -13,9 +13,9 @@ class LoginResource(Resource):
     """
 
     @validate()
-    def post(self, data: UserLogin):
-        user = User.query.filter_by(username=data.username).first()
-        if user and user.check_password(data.password):
+    def post(self, body: UserLogin):
+        user = User.query.filter_by(username=body.username).first()
+        if user and user.check_password(body.password):
             access_token, refresh_token = create_tokens_pair(user.username)
             set_refresh_token(refresh_token)
 

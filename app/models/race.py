@@ -1,13 +1,14 @@
 from sqlalchemy.sql import func
+from sqlalchemy_serializer import SerializerMixin
 from .db import db
 
 
-class Race(db.Model):
+class Race(db.Model, SerializerMixin):
     """
     This object has statistics of particular race of user
     """
 
-    __tabelname__ = 'races'
+    __tablename__ = 'races'
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime(timezone=True), default=func.now())

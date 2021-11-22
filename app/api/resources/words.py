@@ -6,18 +6,6 @@ from app.models import Words, db
 
 
 class WordsResource(Resource):
-    def post(self, data: WordsCreate):
-        """
-        Create new race object
-        """
-
-        # Try get wordlist by words_title, if wordlist already exist raise ValueError
-        word_list = Words.query.filter_by(words_title=data.words_title).first()
-        if word_list:
-            raise ValueError(f"Wordlist ({data.words_title}) already exist in database.")
-        # Create new user object by calling create function from User class
-        word_list.create(words_title=data.words_title, words=data.words)
-
     def get(self, words_id: int):
         """
         Get user profile info
@@ -26,23 +14,27 @@ class WordsResource(Resource):
         return word_list
 
     @validate()
-    def put(self, words_id: int, changes: WordsEdit):
+    def post(self, body: WordsCreate):
+        """
+        Create new words object
+        """
+
+        # Try get wordlist by words_title, if wordlist already exist raise ValueError
+        word_list = Words.query.filter_by(words_title=body.words_title).first()
+        if word_list:
+            raise ValueError(f"Wordlist ({body.words_title}) already exist in database.")
+        # Create new user object by calling create function from User class
+        word_list.create(words_title=body.words_title, words=body.words)
+
+    @validate()
+    def put(self, words_id: int, body: WordsEdit):
         """
         Edit user profile
         """
         # Get username, password from changes and handle them
         words_object = Words.query.filter_by(id=words_id).first()
-        if changes.words_title:
-            words_object.words_title = changes.words_title
-        if changes.words:
-            words_object.words = changes.words
-        db.session.commit()
-
-    def delete(self, words_id: int):
-        """
-        Delete user profile
-        """
-        words_object = Words.query.filter_by(id=words_id).first()
-        # does this also delete sub tables as user.
-        db.session.delete(words_object)
+        if body.words_title:
+            words_object.words_title = body.words_title
+        if body.words:
+            words_object.words = body.words
         db.session.commit()
