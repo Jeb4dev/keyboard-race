@@ -20,16 +20,8 @@ class Race(db.Model, SerializerMixin):
     epm = db.Column(db.Integer, default=0)  # Errors per minute
     accuracy = db.Column(db.Integer, default=0)  # Accuracy
     time = db.Column(db.Integer, default=0)  # Time that user used in challenge, in seconds
+    errors = db.Column(db.String(1000), default="")  # JSON object of count of misstyped characters.
+    # TODO: Check if adding errors column is done correctly, should it be referred elsewhere?
 
     def __repr__(self):
-        return ("Race("
-                f"id={self.id}, "
-                f"date(exact time when )={self.date}, "
-                f"ranking(how did player rank)={self.ranking}, "
-                f"total_participants(total amount of player)={self.total_participants}, "
-                f"wpm(words per minute)={self.wpm}, "
-                f"epm(errors per minute)={self.epm}, "
-                f"accuracy(in per cents 0-100)={self.accuracy}, "
-                f"time(how long did the challenge take)={self.time}, "
-                ")"
-                )
+        return f"Race(id={self.id})"
