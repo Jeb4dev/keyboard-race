@@ -11,6 +11,7 @@ class BaseRace(BaseModel):
     epm: Optional[int] = None
     accuracy: Optional[int] = None
     time: Optional[int] = None
+    errors: Optional[int] = None
 
 
 class RaceCreate(BaseRace):
