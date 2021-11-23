@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 
-from ..jwt import get_current_user, create_tokens_pair
+from ..jwt import get_current_user, create_tokens_pair, set_refresh_token
 from ..schemas import ErrorResponse
 from ..schemas.auth import TokenResponse
 
@@ -17,5 +17,6 @@ class RefreshResource(Resource):
         user = get_current_user()
         if user:
             access_token, refresh_token = create_tokens_pair(user.username)
-            return TokenResponse(access_token=access_token, refresh_token=refresh_token)
+            set_refresh_token(refresh_token)
+            return TokenResponse(access_token=access_token)
         return ErrorResponse(error="Invalid identity"), 401

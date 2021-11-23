@@ -4,3 +4,4 @@ from .refresh import RefreshResource
 from .logout import LogoutResource
 from .register import RegisterResource
 from .statistics import StatisticsResource
+from .account import AccountResource

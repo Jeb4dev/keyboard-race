@@ -15,7 +15,7 @@ class UserResource(Resource):
         """
         user = User.query.filter_by(id=user_id).first()
         if user:
-            return user.to_dict(rules=('-password', '-races', '-statistics'))
+            return user.to_dict(rules=('-password', '-password_hash', '-races', '-statistics'))
         return ErrorResponse(error="User not found").dict(), 404
 
     @validate()
