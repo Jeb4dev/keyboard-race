@@ -1,9 +1,10 @@
 # Keyboard race
 
-This was made as part of the weekly programming challenge hosted by [DevJam].
+## Purpose
+This project was made as part of the weekly programming challenge hosted by [DevJam].
 The project was made for learning purposes.
 
-## About the project
+## About the Challenge
 #### 🛠 Difficulty Level: Intermediate 
 📅 Start: November 19th<br>
 📅 Deadline: November 25th 16:00 (4PM) GMT
@@ -68,6 +69,7 @@ Give feedback, suggest new features, maybe even create pull request.
 
 ## License
 
-tba.
+MIT
 
    [Flask]: <https://flask.palletsprojects.com/en/2.0.x/>
+   [DevJam]: <https://discord.gg/nZBxGEudY6>
