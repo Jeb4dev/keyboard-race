@@ -3,7 +3,7 @@ from flask_pydantic import validate
 
 from app.api.schemas import ErrorResponse
 from app.api.schemas.user import UserCreate
-from app.api.schemas.auth import TokenResponse
+from app.api.schemas.auth import AccountResponse
 from app.models import User
 from app.api.jwt import create_tokens_pair, set_refresh_token
 
@@ -22,4 +22,4 @@ class RegisterResource(Resource):
         user = User.create(username=body.username, password=body.password)
         access_token, refresh_token = create_tokens_pair(user.username)
         set_refresh_token(refresh_token)
-        return TokenResponse(access_token=access_token), 201
+        return AccountResponse(access_token=access_token, user_id=user.id), 201

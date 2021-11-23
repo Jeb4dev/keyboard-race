@@ -8,3 +8,7 @@ class UserLogin(UserCreate):
 
 class TokenResponse(BaseModel):
     access_token: str
+
+
+class AccountResponse(TokenResponse):
+    user_id: int

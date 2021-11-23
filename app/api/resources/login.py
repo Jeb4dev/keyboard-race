@@ -4,7 +4,7 @@ from flask_pydantic import validate
 from app.models import User
 from ..jwt import create_tokens_pair, set_refresh_token
 from ..schemas import ErrorResponse
-from ..schemas.auth import UserLogin, TokenResponse
+from ..schemas.auth import UserLogin, AccountResponse
 
 
 class LoginResource(Resource):
@@ -19,5 +19,5 @@ class LoginResource(Resource):
             access_token, refresh_token = create_tokens_pair(user.username)
             set_refresh_token(refresh_token)
 
-            return TokenResponse(access_token=access_token)
+            return AccountResponse(access_token=access_token, user_id=user.id)
         return ErrorResponse(error="Invalid credentials").dict(), 400
