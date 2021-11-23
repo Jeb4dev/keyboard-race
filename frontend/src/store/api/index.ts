@@ -45,6 +45,7 @@ api.interceptors.response.use(
     }
     try {
       await axios.request<{ access_token: string }>({
+        method: 'POST',
         url: `${baseApi}/auth/refresh`,
         headers: getAuthHeaders(),
         withCredentials: true,
