@@ -4,7 +4,7 @@ import { useStore } from 'effector-react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Link, Spacer, Text } from '@chakra-ui/react';
 
-import { $account, login, register as registerEvent, fetchAccount } from '../../store/account';
+import { $account, login, register as registerEvent } from '../../store/account';
 import { useNavigate } from 'react-router';
 
 type AuthValues = {
@@ -29,7 +29,6 @@ function AuthForm({ authType }: AuthProps) {
 
   useEffect(() => {
     if (store.id !== 0) {
-      // fetchAccount();
       navigate('/account');
     }
   }, [store.id]);

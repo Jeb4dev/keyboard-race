@@ -3,11 +3,9 @@ from app.app import socketio
 from app.api.jwt import get_current_user
 from app.models import Words
 
-
 """
 This file contains all server sockets.
 """
-
 
 active_rooms = {}
 
@@ -15,7 +13,6 @@ active_rooms = {}
 # Redirect users to landing page
 # Close / remove room
 def remove_room(room_name):
-
     # will users disconnect automatically when room is closed or do we need to use "leave_room()" ?
 
     # Should users in room be redirected somewhere before close?? ↓ ↓
@@ -50,12 +47,12 @@ def on_disconnect():
         remove_room(user.id)
         active_rooms[user.id].clear()  # Does this work?
     # Iterate trough dict, check if user id in roomname.usernames, if -> leave room
-    for key in active_rooms:
-        if user.id in key["username"]:
+    for owner_id, room in active_rooms.items():
+        if user.id in room["username"]:
             # announce room that user left, if this is even needed
-            emit('cl_user_left_race', user.id, to=key)
+            emit('cl_user_left_race', user.id, to=owner_id)
             # Leave room
-            leave_room(key)
+            leave_room(owner_id)
     print(f"{user.username} disconnected!")
 
 
@@ -81,7 +78,7 @@ def join_race(data):
         active_rooms[user_id] = {
             "users": [user_id],
             "room_title": room_title
-            }
+        }
     else:
         # Add user to room users list
         active_rooms[room_name]["users"].append(user_id)
