@@ -1,6 +1,5 @@
 from sqlalchemy_serializer import SerializerMixin
 from .db import db
-from .race import Race
 
 
 class Statistics(db.Model, SerializerMixin):
