@@ -42,6 +42,11 @@ forward({
   to: logoutFx,
 });
 
+forward({
+  from: [loginFx.doneData, registerFx.doneData],
+  to: fetchAccount,
+});
+
 const onErrorAuth = (error: string) => {
   return (state: AccountStore, result: number): AccountStore => {
     if (result !== 0) {

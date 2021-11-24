@@ -22,7 +22,7 @@ function Header() {
           <Button>Create Race</Button>
         </Box>
         <Box p="2">
-          <Link to="/account">
+          <Link to={isAuthorized ? '/account' : '/account/login'}>
             <Button>{isAuthorized ? <FaUser /> : <FaSignInAlt />}</Button>
           </Link>
         </Box>
