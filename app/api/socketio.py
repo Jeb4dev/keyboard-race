@@ -2,7 +2,7 @@ from flask_socketio import emit, join_room, leave_room, close_room
 from app.app import socketio
 from app.api.jwt import get_current_user
 from app.models import Words
-
+from app.models.db import db
 
 """
 This file contains all server sockets.
@@ -27,9 +27,43 @@ def remove_room(room_name):
 
 
 # Handle saving statistics to the database
-def handle_statistics(user, data):
-    # TODO: saving changes to db...
-    # TODO: calculating new averages...
+def handle_statistics(data):
+    user = get_current_user()
+
+    # Update statistics object with new averages etc.
+    if data.wpm > user.statistics.best_wpm:
+        user.statistics.best_wpm = data.wpm
+    else:
+        user.statistics.best_wpm = user.statistics.best_wpm
+    total_races = user.statistics.total_races + 1
+
+    if data.ranking == 1:
+        user.statistics.total_wins = user.statistics.total_wins + 1
+    else:
+        user.statistics.total_wins = user.statistics.total_wins
+
+    # if it is users first race average records are same than current race records
+    if total_races == 1:
+        user.statistics.average_wpm = data.wpm
+
+        user.statistics.average_epm = data.epm
+
+        user.statistics.average_accuracy = data.accuracy
+
+        user.statistics.average_time = data.time
+
+    # else recalculate average values
+    else:
+        user.statistics.average_wpm = (user.statistics.average_wpm * (total_races - 1) + data.wpm) / total_races
+
+        user.statistics.average_epm = (user.statistics.average_epm * (total_races - 1) + data.epm) / total_races
+
+        user.statistics.average_accuracy = (user.statistics.average_accurasy * (total_races - 1) + data.accuracy) / total_races
+
+        user.statistics.average_time = (user.statistics.average_time * (total_races - 1) + data.time) / total_races
+
+    db.session.commit()
+
     print(f"{user.username} updated their statistics: word per minute was {data['wpm']}!")
 
 
