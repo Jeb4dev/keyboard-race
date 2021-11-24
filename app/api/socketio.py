@@ -59,32 +59,39 @@ def on_disconnect():
     print(f"{user.username} disconnected!")
 
 
-# Join room, if not room, crete room
-@socketio.on('sv_join_race')
-def join_race(data):
+# Create room
+@socketio.on('sv_create_race')
+def create_race(data):
     user = get_current_user()
     user_id = user.id
 
-    if data["room_title"]:
-        room_title = data["room_title"]
-    else:
-        room_title = f"{user.username}'s room"
+    room_title = f"{user.username}'s room"
 
     if data["room"]:
         room_name = data["room"]
     else:
         room_name = user_id
 
-    # Check if room exist
-    if room_name not in active_rooms:
-        # Add room to dict of rooms
-        active_rooms[user_id] = {
-            "users": [user_id],
-            "room_title": room_title
-            }
-    else:
-        # Add user to room users list
-        active_rooms[room_name]["users"].append(user_id)
+    # Add room to dict of rooms
+    active_rooms[user_id] = {
+        "users": [],
+        "room_title": room_title
+        }
+
+    emit('cl_create_race', room_title)  # must call sv_join_race
+    print(f"{user.username} created {room_title}!")
+
+
+# Join room
+@socketio.on('sv_join_race')
+def join_race(data):
+    user = get_current_user()
+
+    room_title = data["room_title"]
+
+    room_name = data["room"]
+
+    active_rooms[room_name]["users"].append(user.id)
 
     # Join room
     join_room(room_name)
@@ -92,7 +99,7 @@ def join_race(data):
     print(f"{user.username} joined {room_title}!")
 
 
-# Join room, if not room, crete room
+# Leave room
 @socketio.on('sv_leave_race')
 def leave_race(data):
     user = get_current_user()
@@ -105,6 +112,16 @@ def leave_race(data):
     # Leave room
     leave_room(room_name)
     print(f"{user.username} left {data['room_title']}!")
+
+
+# Get list of active rooms
+@socketio.on('sv_get_active_rooms')
+def list_active_races(data):
+    user = get_current_user()
+
+    # return active_rooms dictionary, that contains active_room_id, user_id's, room_title
+    emit('sv_get_active_rooms', active_rooms)
+    print(f"{user.username} asked list of active rooms! return {str(active_rooms)}")
 
 
 # Start race
