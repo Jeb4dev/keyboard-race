@@ -19,5 +19,5 @@ class LoginResource(Resource):
             access_token, refresh_token = create_tokens_pair(user.username)
             set_refresh_token(refresh_token)
 
-            return AccountResponse(access_token=access_token, user_id=user.id)
+            return AccountResponse(access_token=access_token, user_id=user.id).dict()
         return ErrorResponse(error="Invalid credentials").dict(), 400

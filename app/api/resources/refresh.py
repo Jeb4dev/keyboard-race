@@ -11,12 +11,11 @@ class RefreshResource(Resource):
     Resource for getting new access and refresh tokens
     """
 
-    @jwt_required()
     @jwt_required(refresh=True, locations=["cookies"])  # Require both tokens
     def post(self):
         user = get_current_user()
         if user:
             access_token, refresh_token = create_tokens_pair(user.username)
             set_refresh_token(refresh_token)
-            return TokenResponse(access_token=access_token)
-        return ErrorResponse(error="Invalid identity"), 401
+            return TokenResponse(access_token=access_token).dict()
+        return ErrorResponse(error="Invalid identity").dict(), 401

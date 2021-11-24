@@ -22,4 +22,4 @@ class RegisterResource(Resource):
         user = User.create(username=body.username, password=body.password)
         access_token, refresh_token = create_tokens_pair(user.username)
         set_refresh_token(refresh_token)
-        return AccountResponse(access_token=access_token, user_id=user.id), 201
+        return AccountResponse(access_token=access_token, user_id=user.id).dict(), 201

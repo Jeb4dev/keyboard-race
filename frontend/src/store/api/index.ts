@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const baseApi = import.meta.env.PROD ? '/api' : import.meta.env.VITE_BASE_API_URL;
 
-const getAuthHeaders = (): Record<string, string> => {
+export const getAuthHeaders = (): Record<string, string> => {
   const accessToken = localStorage.getItem('access_token');
   if (accessToken) {
     return {

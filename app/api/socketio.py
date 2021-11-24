@@ -1,5 +1,5 @@
-from flask_socketio import emit, join_room, leave_room, close_room
-from app.app import socketio
+from flask_socketio import emit, join_room, leave_room, close_room, SocketIO
+from flask_jwt_extended import jwt_required
 from app.api.jwt import get_current_user
 from app.models import Words
 
@@ -8,6 +8,8 @@ from app.models.db import db
 """
 This file contains all server sockets.
 """
+
+socketio = SocketIO(logger=True, cors_allowed_origins="*", async_mode="eventlet")
 
 active_rooms = {}
 
@@ -56,7 +58,7 @@ def handle_statistics(user, data):
         user.statistics.average_epm = (user.statistics.average_epm * (total_races - 1) + data.epm) / total_races
 
         user.statistics.average_accuracy = (user.statistics.average_accurasy * (
-                total_races - 1) + data.accuracy) / total_races
+            total_races - 1) + data.accuracy) / total_races
 
         user.statistics.average_time = (user.statistics.average_time * (total_races - 1) + data.time) / total_races
 
@@ -67,8 +69,8 @@ def handle_statistics(user, data):
 
 # When user connected
 @socketio.on('connect')
+@jwt_required()
 def on_connect():
-    emit("connect")
     print("User connected!")
 
 
@@ -93,6 +95,7 @@ def on_disconnect():
 
 # Create room
 @socketio.on('sv_create_race')
+@jwt_required()
 def create_race(data):
     user = get_current_user()
     user_id = user.id
@@ -126,6 +129,7 @@ def create_race(data):
 
 # Join room
 @socketio.on('sv_join_race')
+@jwt_required()
 def join_race(data):
     user = get_current_user()
 
@@ -143,6 +147,7 @@ def join_race(data):
 
 # Leave room
 @socketio.on('sv_leave_race')
+@jwt_required()
 def leave_race(data):
     user = get_current_user()
     user_id = user.id
@@ -158,7 +163,8 @@ def leave_race(data):
 
 # Get list of active rooms
 @socketio.on('sv_get_active_rooms')
-def list_active_races(data):
+@jwt_required()
+def list_active_races():
     user = get_current_user()
 
     # return active_rooms dictionary, that contains active_room_id, user_id's, room_title
@@ -168,6 +174,7 @@ def list_active_races(data):
 
 # Start race
 @socketio.on('sv_start_race')
+@jwt_required()
 def start_race(data):
     user = get_current_user()
 
@@ -186,6 +193,7 @@ def start_race(data):
 
 # Clients send server race progress, that value is redirected all clients in the same race
 @socketio.on('sv_get_progress')
+@jwt_required()
 def get_progress(data):  # data should at least contain room name, user whose data it is and what is the progress level
     user = get_current_user()
     words = Words.query.all()
@@ -206,6 +214,7 @@ def get_progress(data):  # data should at least contain room name, user whose da
 
 # Get statistics when race is finished and save them to db, show user statistics
 @socketio.on('sv_get_race_statistics')
+@jwt_required()
 def get_race_statistics(data):
     # data should at least contain: room name, wpm, epm, ranking,
     # total participants, accuracy, race time, words title, errors
