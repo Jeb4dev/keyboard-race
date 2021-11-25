@@ -27,10 +27,10 @@ Typing practice displays a word which you must then type within a specific inter
 
 
 ##### 🌟 Bonus features (optional)
-- [ ] Text box is not cleared when a wrong letter is typed instead  as the user is writing the word, the correct letters are marked  as green and the incorrect letters are marked as red
-- [ ] User can see their statistics across multiple session
+- [x] Text box is not cleared when a wrong letter is typed instead  as the user is writing the word, the correct letters are marked  as green and the incorrect letters are marked as red
+- [x] User can see their statistics across multiple session
 - [ ] Users can login and see how their score compared with others (leaderboard)
-- [ ] Users can compete with others
+- [x] Users can compete with others
 
 
 ## Tech
