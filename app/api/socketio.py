@@ -1,8 +1,11 @@
+from flask import request
 from flask_socketio import emit, join_room, leave_room, close_room, SocketIO
 from flask_jwt_extended import jwt_required
+from random import choice
+from datetime import datetime, timezone
 
 from app.api.jwt import get_current_user
-from app.models import Words
+from app.models import Words, User
 from app.models.db import db
 
 """
@@ -12,9 +15,8 @@ This file contains all server sockets.
 socketio = SocketIO(logger=True, cors_allowed_origins="*", async_mode="eventlet")
 
 active_rooms = {}
+users = {}
 
-
-# TODO: error handling, expired token, wrong / missing data
 
 # Redirect users to landing page
 # Close / remove room
@@ -70,6 +72,23 @@ def handle_statistics(user, data):
     print(f"{user.username} updated their statistics: word per minute was {data['wpm']}!")
 
 
+def get_words():
+    if len(Words.query.all()) < 1:
+        db.session.add(Words(words="""One login. All your devices. A family of products that respect your privacy.
+                                Join Firefox""", words_title="test", user_id=1))
+        db.session.add(Words(words="""
+                MR JONES of the Manor Farm, had locked the hen-houses for the night, but was too drunk to remember to shut the pop-holes. With the ring of light from his lantern dancing from side to side he lurched across the yard, kicked off his boots at the back door, drew himself a last glass of beer from the barrel in the scullery, and made his way up to bed, where Mrs Jones was already snoring.
+                """, words_title="Animal Farm: C1 P1", user_id=1))
+        db.session.add(Words(words="""
+                As soon as the light in the bedroom went out there was a stirring and a fluttering all through the farm buildings. Word had gone round during the day that old Major, the prize Middle White boar, had had a strange dream on the previous night and wished to communicate it to the other animals. It had been agreed that they should all meet in the big barn as soon as Mr Jones was safely out of the way. Old Major (so he was always called, though the name under which he had been exhibited was Willingdon Beauty) was so highly regarded on the farm that everyone was quite ready to lose an hour's sleep in order to hear what he had to say.
+                """, words_title="Animal Farm: C1 P2", user_id=1))
+        db.session.add(Words(words="""
+                At one end of the big barn, on a sort of raised platform, Major was already ensconced on his bed of straw, under a lantern which hung from a beam. He was twelve years old and had lately grown rather stout, but he was still a majestic-looking pig, with a wise and benevolent appearance in spite of the fact that his tushes had never been cut. Before long the other animals began to arrive and make themselves comfortable after their different fashions. First came the three dogs, Bluebell, Jessie and Pincher, and then the pigs, who settled down in the straw immediately in front of the platform. The hens perched themselves on the window-sills, the pigeons fluttered up to the rafters, the sheep and cows lay down behind the pigs and began to chew the cud. The two cart-horses, Boxer and Clover, came in together, walking very slowly and setting down their vast hairy hoofs with great care lest there should be some small animal concealed in the straw. Clover was a stout motherly mare approaching middle life, who had never quite got her figure back after her fourth foal. Boxer was an enormous beast, nearly eighteen hands high, and as strong as any two ordinary horses put together. A white stripe down his nose gave him a somewhat stupid appearance, and in fact he was not of first-rate intelligence, but he was universally respected for his steadiness of character and tremendous powers of work. After the horses came Muriel, the white goat, and Benjamin the donkey. Benjamin was the oldest animal on the farm, and the worst tempered. He seldom talked, and when he did it was usually to make some cynical remark — for instance he would say that God had given him a tail to keep the flies off, but that he would sooner have had no tail and no flies. Alone among the animals on the farm he never laughed. If asked why, he would say that he saw nothing to laugh at. Nevertheless, without openly admitting it, he was devoted to Boxer; the two of them usually spent their Sundays together in the small paddock beyond the orchard, grazing side by side and never speaking.
+                """, words_title="Animal Farm: C1 P3", user_id=1))
+        db.session.commit()
+    return choice(Words.query.all()).to_dict(rules=('-id', '-user_id'))
+
+
 # Error handling
 @socketio.on_error()
 @jwt_required()
@@ -81,29 +100,28 @@ def handle_error(e):
 @socketio.on('connect')
 @jwt_required()
 def on_connect():
-    print("User connected!")
+    user = get_current_user()
+    print("User connected!", user)
+    users[request.sid] = user.id
 
 
 # When user disconnects
 @socketio.on('disconnect')
 def on_disconnect():
-    print("Unknown user disconnected!")
-    return True
-    # TODO: ISSUE: get_current_user() returns error as user is no more current... ?
-    user = get_current_user()  # This doesnt work
+    user_id = users[request.sid]
 
     # Check if user was race leader, if -> remove lobby
-    if active_rooms[user.id]:
-        remove_room(user.id)
-        del active_rooms[user.id]  # Does this work?
+    if active_rooms[user_id]:
+        remove_room(user_id)
+        del active_rooms[user_id]  # Does this work?
     # Iterate trough dict, check if user id in roomname.usernames, if -> leave room
     for owner_id, room in active_rooms.items():
-        if user.id in room["username"]:
+        if user_id in room["username"]:
             # announce room that user left, if this is even needed
-            emit('cl_user_left_race', user.id, to=owner_id)
+            emit('cl_user_left_race', user_id, to=owner_id)
             # Leave room
             leave_room(owner_id)
-    print(f"{user.username} disconnected!")
+    print(f"{user_id} disconnected!")
 
 
 # Create room
@@ -121,27 +139,20 @@ def create_race():
     if room_name not in active_rooms:
         # Add room to dict of rooms
         active_rooms[user_id] = {
-            "users": [user_id],
-            "room_title": room_title
+            "users": [],
+            "room_title": room_title,
+            "started": False,
+            "words": get_words(),
+            "time_start": 0
         }
     else:
         # Add user to room users list
         active_rooms[room_name]["users"].append(user_id)
     # Add room to dict of rooms
-    active_rooms[user_id] = {
-        "users": [],
-        "room_title": room_title
-    }
 
     # If the wordlist is empty, create one.
-    if len(Words.query.all()) < 1:
-        words_ = Words(words="""One login. All your devices. A family of products that respect your privacy.
-                        Join Firefox""", words_title="test", user_id=user.id)
-        db.session.add(words_)
-        db.session.commit()
-        print("Created new record in Words table")
 
-    emit('cl_create_race', user_id)  # must call sv_join_race
+    emit('cl_create_race', active_rooms)  # must call sv_join_race
     print(f"{user.username} created {room_title} with id {user_id}!")
 
 
@@ -151,16 +162,14 @@ def create_race():
 def join_race(data):
     user = get_current_user()
 
-    room_title = data["room_title"]
-
     room_name = data["room"]
 
     active_rooms[room_name]["users"].append(user.id)
 
     # Join room
     join_room(room_name)
-    emit('cl_join_race', room_title)
-    print(f"{user.username} joined {room_title}!")
+    emit('cl_join_race')
+    print(f"{user.username} joined {room_name}!")
 
 
 # Leave room
@@ -186,7 +195,7 @@ def leave_race(data):
         remove_room(user.id)
         del active_rooms[user.id]
 
-    print(f"{user.username} left {data['room_title']}!")
+    print(f"{user.username} left from {room_name}!")
 
 
 # Get list of active rooms
@@ -203,21 +212,17 @@ def list_active_races():
 # Start race
 @socketio.on('sv_start_race')
 @jwt_required()
-def start_race(data):
+def start_race():
     user = get_current_user()
-
-    room_name = data["room"]
-    room_title = active_rooms[room_name]["room_title"]
+    print("start")
 
     # Send word list to clients
-    words = Words.query.first()
-    wordlist_title = words.words_title
-    wordlist = words.words
-    emit('cl_get_wordlist', (wordlist_title, wordlist), to=room_name)
 
     # Tell clients to start race
-    emit('cl_start_race', data, to=room_name)
-    print(f"{user.username} started race in {room_title}!")
+    active_rooms[user.id]["started"] = True
+    active_rooms[user.id]["time_start"] = int(datetime.now(timezone.utc).timestamp() * 1000)
+    emit('cl_start_race', to=user.id)
+    print(f"{user.username} started race!")
 
 
 # Clients send server race progress, that value is redirected all clients in the same race
@@ -228,12 +233,6 @@ def get_progress(data):  # data should at least contain room name, user whose da
     words = Words.query.first()
 
     room_name = data["room"]
-
-    words_title = words.words_title
-    wordlist = words.words
-
-    # Send word list to clients
-    emit('cl_get_wordlist', (words_title, wordlist), to=room_name)
 
     # Tell clients to start race
     emit('cl_get_progress', data, to=room_name)

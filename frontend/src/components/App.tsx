@@ -21,7 +21,7 @@ function App() {
                 <Route path=":form" element={<AccountFormPage />} />
               </Route>
               <Route path="race">
-                <Route index element={<RacePage />} />
+                <Route path=":userId" element={<RacePage />} />
               </Route>
             </Route>
           </Routes>

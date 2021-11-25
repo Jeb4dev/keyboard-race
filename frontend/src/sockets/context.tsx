@@ -2,11 +2,25 @@ import React, { useState, useEffect, createContext, useRef } from 'react';
 import { connect, Socket } from 'socket.io-client';
 
 import { getAuthHeaders } from '../store/api';
+import { getRooms } from './actions';
 
 interface ISocketContext {
   rooms: any;
   socket: Socket | undefined;
 }
+
+export interface IRoom {
+  users: number[];
+  room_title: string;
+  started: boolean;
+  words: {
+    words_title: string;
+    words: string;
+  };
+  time_start: number;
+}
+
+type IRooms = Record<number, IRoom>;
 
 export const SocketContext = createContext<ISocketContext>({
   rooms: [],
@@ -20,7 +34,7 @@ interface SocketProviderProps {
 function SocketProvider({ children }: SocketProviderProps) {
   const socketRef = useRef<Socket>();
 
-  const [rooms, setRooms] = useState<any>({});
+  const [rooms, setRooms] = useState<IRooms>({});
   useEffect(() => {
     socketRef.current = connect(import.meta.env.VITE_SOCKET_URL, {
       forceNew: true,
@@ -28,17 +42,23 @@ function SocketProvider({ children }: SocketProviderProps) {
     });
     const socket = socketRef.current;
 
-    socket.on('connect', () => {
-      console.log('conn');
-      socket.emit('sv_get_active_rooms');
-    });
-    socket.on('sv_get_active_rooms', (activeRooms) => {
-      console.log('rooms', activeRooms);
-      setRooms(activeRooms);
-    });
-    socket.on('cl_create_race', (userId) => {
-      setRooms({ ...rooms, [userId]: {} });
-    });
+    const roomsUpdate = () => getRooms(socket);
+
+    socket
+      .on('connect', () => {
+        console.log('conn');
+        socket.emit('sv_get_active_rooms');
+      })
+      .on('sv_get_active_rooms', (activeRooms) => {
+        console.log('rooms', activeRooms);
+        setRooms(activeRooms);
+      })
+      .on('cl_create_race', (newRooms) => {
+        roomsUpdate();
+      })
+      .on('cl_join_race', roomsUpdate)
+      .on('cl_user_left_race', roomsUpdate)
+      .on('cl_start_race', roomsUpdate);
   }, []);
 
   return (

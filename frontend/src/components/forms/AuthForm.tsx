@@ -5,7 +5,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Link, Spacer, Text } from '@chakra-ui/react';
 
 import { $account, login, register as registerEvent } from '../../store/account';
-import { useNavigate } from 'react-router';
 
 type AuthValues = {
   username: string;
@@ -18,7 +17,6 @@ interface AuthProps {
 
 function AuthForm({ authType }: AuthProps) {
   const store = useStore($account);
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,7 +27,7 @@ function AuthForm({ authType }: AuthProps) {
 
   useEffect(() => {
     if (store.id !== 0) {
-      navigate('/account');
+      window.location.href = '/';
     }
   }, [store.id]);
 

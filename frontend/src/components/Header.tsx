@@ -5,18 +5,18 @@ import { FaSignInAlt, FaUser } from 'react-icons/fa';
 import { useStore } from 'effector-react';
 
 import { $account } from '../store/account';
-import { useSocket } from '../sockets/useSocket';
-import { createRace } from '../sockets/actions';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 
 function Header() {
   const store = useStore($account);
   const navigate = useNavigate();
+  const location = useLocation();
   const isAuthorized = store.id !== 0;
-  const { socket } = useSocket();
   const onCreateRace = () => {
-    createRace(socket);
     navigate(`/race/${store.id}`);
+    if (location.pathname === `/race/${store.id}`) {
+      window.location.reload();
+    }
   };
 
   return (
