@@ -5,7 +5,7 @@ import { getAuthHeaders } from '../store/api';
 import { getRooms } from './actions';
 
 interface ISocketContext {
-  rooms: any;
+  rooms: IRooms;
   socket: Socket | undefined;
 }
 
@@ -58,7 +58,8 @@ function SocketProvider({ children }: SocketProviderProps) {
       })
       .on('cl_join_race', roomsUpdate)
       .on('cl_user_left_race', roomsUpdate)
-      .on('cl_start_race', roomsUpdate);
+      .on('cl_start_race', roomsUpdate)
+      .on('cl_user_should_update_rooms', roomsUpdate);
   }, []);
 
   return (

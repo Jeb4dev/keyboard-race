@@ -153,6 +153,7 @@ def create_race():
     # If the wordlist is empty, create one.
 
     emit('cl_create_race', active_rooms)  # must call sv_join_race
+    emit('cl_user_should_update_rooms', broadcast=True)
     print(f"{user.username} created {room_title} with id {user_id}!")
 
 
@@ -164,7 +165,8 @@ def join_race(data):
 
     room_name = data["room"]
 
-    active_rooms[room_name]["users"].append(user.id)
+    if user.id not in active_rooms[room_name]["users"]:
+        active_rooms[room_name]["users"].append(user.id)
 
     # Join room
     join_room(room_name)
@@ -183,6 +185,7 @@ def leave_race(data):
 
     # announce room that user left, if this is even needed
     emit('cl_user_left_race', user_id, to=room_name)
+    emit('cl_user_should_update_rooms', broadcast=True)
 
     # Leave room
     leave_room(room_name)

@@ -22,7 +22,7 @@ function RacePage() {
           createRace(socket);
           joinRace(socket, userId);
         }
-      } else if (userId > 0) {
+      } else if (rooms[userId] && !rooms[userId].users.includes(account.id)) {
         joinRace(socket, userId);
       }
     }
