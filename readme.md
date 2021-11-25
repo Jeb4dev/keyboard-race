@@ -13,14 +13,14 @@ The project was made for learning purposes. Made by Jeb and mihet05.
 Typing practice displays a word which you must then type within a specific interval of time
 
 ##### 📑User Stories
-- [ ] User can click a 'Start Practice' button to start the practice session.
-- [ ] When a practice session starts, the timer starts increasing
-- [ ] User is shown a word
-- [ ] User can type the word in a text input box
-- [ ] If a user enters an incorrect letter, the text input box is cleared
-- [ ] If a user enters all letters correctly, then the text input box is cleared and a new word is shown
-- [ ] User can click "End Practice" button to end the session.
-- [ ] When the session ends, the typing speed is shown (words per minute)
+- [x] User can click a 'Start Practice' button to start the practice session.
+- [x] When a practice session starts, the timer starts increasing
+- [x] User is shown a word
+- [x] User can type the word in a text input box
+- [x] If a user enters an incorrect letter, the text input box is cleared
+- [x] If a user enters all letters correctly, then the text input box is cleared and a new word is shown
+- [x] User can click "End Practice" button to end the session.
+- [x] When the session ends, the typing speed is shown (words per minute)
 
 
 ##### 🌟 Bonus features (optional)
