@@ -40,6 +40,7 @@ def handle_statistics(user, data):
     else:
         user.statistics.best_wpm = user.statistics.best_wpm
     total_races = user.statistics.total_races + 1
+    user.statistics.total_races += 1
 
     if data["ranking"] == 1:
         user.statistics.total_wins = user.statistics.total_wins + 1

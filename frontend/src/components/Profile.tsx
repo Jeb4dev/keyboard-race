@@ -4,6 +4,7 @@ import { Box, Button, Center, Heading, Table, TableCaption, Tbody, Td, Th, Thead
 
 import { $account, logout } from '../store/account';
 import { getStats, StatisticsResponse } from '../store/api/user';
+import { formatTime } from './StopDialog';
 
 function Profile() {
   const store = useStore($account);
@@ -41,7 +42,7 @@ function Profile() {
           </Tr>
           <Tr>
             <Td>Average time</Td>
-            <Td>{stats?.statistics.average_time}</Td>
+            <Td>{stats?.statistics.average_time ? formatTime(stats?.statistics.average_time) : 0}</Td>
           </Tr>
         </Tbody>
       </Table>
