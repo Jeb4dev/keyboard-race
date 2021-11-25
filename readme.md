@@ -2,7 +2,7 @@
 
 ## Purpose
 This project was made as part of the weekly programming challenge hosted by [DevJam].
-The project was made for learning purposes.
+The project was made for learning purposes. Made by Jeb and mihet05.
 
 ## About the Challenge
 #### 🛠 Difficulty Level: Intermediate 
@@ -34,8 +34,14 @@ Typing practice displays a word which you must then type within a specific inter
 
 #### Frameworks and libraries:
 
-- [Flask] - Micro web framework
-
+- [Flask] - Micro web framework written in python.
+- [Flask-Socketio](https://flask-socketio.readthedocs.io/en/latest/)  Flask-SocketIO gives Flask applications access to low latency bi-directional communications between the clients and the server.
+- [Flask-Restful](https://flask-restful.readthedocs.io/en/latest/) - Flask-RESTful is an extension for Flask that adds support for quickly building REST APIs.
+- [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
+- [Vite](https://vitejs.dev/) - Next Generation Frontend Tooling.
+#### Deployment
+- [Firebase](https://firebase.google.com/) - Firebase helps you build and run successful apps.
+- [Heroku](https://www.heroku.com) - Heroku is a cloud platform as a service supporting several programming languages.
 
 ## Installation and running
 
@@ -56,6 +62,8 @@ run app.py
 ```sh
 python app.py
 ```
+### Deployment
+App is hosted in heroku (backend) and firebase (frontend).
 
 
 ## Development
@@ -65,7 +73,7 @@ Give feedback, suggest new features, maybe even create pull request.
 
 
 ## Credits
-
+- Google for [rocket](https://emojipedia.org/rocket/) emoji.
 
 ## License
 
