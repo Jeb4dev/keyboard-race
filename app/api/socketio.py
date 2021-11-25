@@ -31,28 +31,28 @@ def remove_room(room_name):
 
 # Handle saving statistics to the database
 def handle_statistics(user, data):
-    # TODO: check if this works
     # Update statistics object with new averages etc.
-    if data.wpm > user.statistics.best_wpm:
-        user.statistics.best_wpm = data.wpm
+    print(data)
+    if data["wpm"] > user.statistics.best_wpm:
+        user.statistics.best_wpm = data["wpm"]
     else:
         user.statistics.best_wpm = user.statistics.best_wpm
     total_races = user.statistics.total_races + 1
 
-    if data.ranking == 1:
+    if data["ranking"] == 1:
         user.statistics.total_wins = user.statistics.total_wins + 1
     else:
         user.statistics.total_wins = user.statistics.total_wins
 
     # if it is users first race average records are same than current race records
     if total_races == 1:
-        user.statistics.average_wpm = data.wpm
+        user.statistics.average_wpm = data["wpm"]
 
-        user.statistics.average_epm = data.epm
+        user.statistics.average_epm = data["epm"]
 
-        user.statistics.average_accuracy = data.accuracy
+        user.statistics.average_accuracy = data["accuracy"]
 
-        user.statistics.average_time = data.time
+        user.statistics.average_time = data["time"]
 
     # else recalculate average values
     else:
@@ -61,7 +61,7 @@ def handle_statistics(user, data):
         user.statistics.average_epm = (user.statistics.average_epm * (total_races - 1) + data.epm) / total_races
 
         user.statistics.average_accuracy = (user.statistics.average_accurasy * (
-            total_races - 1) + data.accuracy) / total_races
+            total_races - 1) + data["accuracy"]) / total_races
 
         user.statistics.average_time = (user.statistics.average_time * (total_races - 1) + data.time) / total_races
 
@@ -238,7 +238,6 @@ def get_progress(data):  # data should at least contain room name, user whose da
 @socketio.on('sv_get_race_statistics')
 @jwt_required()
 def get_race_statistics(data):
-    # TODO: test if this socket work as intended, also if function handle_statistics() work.
     # data should at least contain: room name, wpm, epm, ranking,
     # total participants, accuracy, race time, words title, errors
 
