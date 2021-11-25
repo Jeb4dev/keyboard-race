@@ -70,6 +70,13 @@ def handle_statistics(user, data):
     print(f"{user.username} updated their statistics: word per minute was {data['wpm']}!")
 
 
+# Error handling
+@socketio.on_error()
+@jwt_required()
+def handle_error(e):
+    print(f"An error occurred: {e}")
+
+
 # When user connected
 @socketio.on('connect')
 @jwt_required()
