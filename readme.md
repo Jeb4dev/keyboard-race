@@ -2,7 +2,7 @@
 
 ## Purpose
 This project was made as part of the weekly programming challenge hosted by [DevJam].
-The project was made for learning purposes. Made by Jeb and mihet05.
+The project was made for learning purposes. Made by Jeb and mihett05.
 
 [Live Demo](https://keyboard-race.firebaseapp.com/)
 
