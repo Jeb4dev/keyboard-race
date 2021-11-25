@@ -109,7 +109,7 @@ def on_disconnect():
 # Create room
 @socketio.on('sv_create_race')
 @jwt_required()
-def create_race(data):
+def create_race():
     user = get_current_user()
     user_id = user.id
 
@@ -192,7 +192,7 @@ def leave_race(data):
 # Get list of active rooms
 @socketio.on('sv_get_active_rooms')
 @jwt_required()
-def list_active_races(data):
+def list_active_races():
     user = get_current_user()
 
     # return active_rooms dictionary, that contains active_room_id, user_id's, room_title

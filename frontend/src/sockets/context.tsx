@@ -37,7 +37,7 @@ function SocketProvider({ children }: SocketProviderProps) {
       setRooms(activeRooms);
     });
     socket.on('cl_create_race', (userId) => {
-      setRooms({ ...rooms, userId: {} });
+      setRooms({ ...rooms, [userId]: {} });
     });
   }, []);
 

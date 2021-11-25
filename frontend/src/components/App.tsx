@@ -6,6 +6,7 @@ import Layout from './Layout';
 import HomePage from '../pages/home';
 import AccountPage from '../pages/account';
 import AccountFormPage from '../pages/account-form';
+import RacePage from '../pages/race';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
               <Route path="account">
                 <Route index element={<AccountPage />} />
                 <Route path=":form" element={<AccountFormPage />} />
+              </Route>
+              <Route path="race">
+                <Route index element={<RacePage />} />
               </Route>
             </Route>
           </Routes>
