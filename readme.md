@@ -5,6 +5,9 @@ This project was made as part of the weekly programming challenge hosted by [Dev
 The project was made for learning purposes. Made by Jeb and mihett05.
 
 [Live Demo](https://keyboard-race.firebaseapp.com/)
+![image](https://user-images.githubusercontent.com/76889226/143478303-71de98b9-2af2-4eab-b67d-9161566c1af8.png)
+![image](https://user-images.githubusercontent.com/76889226/143478777-e4d8a6ce-afed-4b07-8894-6feb4607920d.png)
+
 
 
 ## About the Challenge
