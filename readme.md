@@ -2,7 +2,10 @@
 
 ## Purpose
 This project was made as part of the weekly programming challenge hosted by [DevJam].
-The project was made for learning purposes. Made by Jeb and mihet05.
+The project was made for learning purposes. Made by Jeb and mihett05.
+
+[Live Demo](https://keyboard-race.firebaseapp.com/)
+
 
 ## About the Challenge
 #### 🛠 Difficulty Level: Intermediate 
@@ -13,21 +16,21 @@ The project was made for learning purposes. Made by Jeb and mihet05.
 Typing practice displays a word which you must then type within a specific interval of time
 
 ##### 📑User Stories
-- [ ] User can click a 'Start Practice' button to start the practice session.
-- [ ] When a practice session starts, the timer starts increasing
-- [ ] User is shown a word
-- [ ] User can type the word in a text input box
-- [ ] If a user enters an incorrect letter, the text input box is cleared
-- [ ] If a user enters all letters correctly, then the text input box is cleared and a new word is shown
-- [ ] User can click "End Practice" button to end the session.
-- [ ] When the session ends, the typing speed is shown (words per minute)
+- [x] User can click a 'Start Practice' button to start the practice session.
+- [x] When a practice session starts, the timer starts increasing
+- [x] User is shown a word
+- [x] User can type the word in a text input box
+- [x] If a user enters an incorrect letter, the text input box is cleared
+- [x] If a user enters all letters correctly, then the text input box is cleared and a new word is shown
+- [x] User can click "End Practice" button to end the session.
+- [x] When the session ends, the typing speed is shown (words per minute)
 
 
 ##### 🌟 Bonus features (optional)
-- [ ] Text box is not cleared when a wrong letter is typed instead  as the user is writing the word, the correct letters are marked  as green and the incorrect letters are marked as red
-- [ ] User can see their statistics across multiple session
+- [x] Text box is not cleared when a wrong letter is typed instead  as the user is writing the word, the correct letters are marked  as green and the incorrect letters are marked as red
+- [x] User can see their statistics across multiple session
 - [ ] Users can login and see how their score compared with others (leaderboard)
-- [ ] Users can compete with others
+- [x] Users can compete with others
 
 
 ## Tech
