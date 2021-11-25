@@ -42,7 +42,6 @@ function Room({ room, roomId, isOwner }: RoomProps) {
       }, 500);
       return () => {
         clearInterval(timer);
-        leaveRace(socket, roomId);
       };
     }
   }, [room.time_start, room.started]);

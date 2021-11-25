@@ -58,7 +58,7 @@ def upgrade():
                     )
     op.create_table('words',
                     sa.Column('id', sa.Integer(), nullable=False),
-                    sa.Column('words', sa.String(length=1000), nullable=False),
+                    sa.Column('words', sa.Text(), nullable=False),
                     sa.Column('words_title', sa.String(length=50), nullable=False),
                     sa.Column('user_id', sa.Integer(), nullable=False),
                     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),

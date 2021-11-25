@@ -4,7 +4,7 @@ import { useStore } from 'effector-react';
 import { Heading } from '@chakra-ui/react';
 
 import { useSocket } from '../sockets/useSocket';
-import { createRace, joinRace } from '../sockets/actions';
+import { createRace, joinRace, leaveRace } from '../sockets/actions';
 
 import { $account } from '../store/account';
 import Room from '../components/Room';
@@ -27,6 +27,12 @@ function RacePage() {
       }
     }
   }, [socket, userId, rooms, account.id]);
+
+  useEffect(() => {
+    if (socket && userId > 0) {
+      return () => leaveRace(socket, userId);
+    }
+  }, [socket, userId]);
 
   if (!rooms[userId]) {
     return <Heading textAlign="center">Room not found</Heading>;

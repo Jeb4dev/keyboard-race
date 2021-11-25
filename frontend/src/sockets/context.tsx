@@ -36,10 +36,13 @@ function SocketProvider({ children }: SocketProviderProps) {
 
   const [rooms, setRooms] = useState<IRooms>({});
   useEffect(() => {
-    socketRef.current = connect(import.meta.env.VITE_SOCKET_URL, {
-      forceNew: true,
-      extraHeaders: getAuthHeaders(),
-    });
+    socketRef.current = connect(
+      import.meta.env.PROD ? 'https://typing-spacerace.herokuapp.com' : import.meta.env.VITE_SOCKET_URL,
+      {
+        forceNew: true,
+        extraHeaders: getAuthHeaders(),
+      },
+    );
     const socket = socketRef.current;
 
     const roomsUpdate = () => getRooms(socket);

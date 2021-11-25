@@ -5,6 +5,8 @@ import RoomCard from '../components/RoomCard';
 function HomePage() {
   const { socket, rooms } = useSocket();
 
+  console.log(rooms);
+
   return (
     <>
       {Object.keys(rooms).map((roomId) => (

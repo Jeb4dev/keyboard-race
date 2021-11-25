@@ -6,7 +6,7 @@ class Words(db.Model, SerializerMixin):
     __tablename__ = 'words'
 
     id = db.Column(db.Integer, primary_key=True)
-    words = db.Column(db.String(1000), nullable=False)
+    words = db.Column(db.Text, nullable=False)
     words_title = db.Column(db.String(50), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
