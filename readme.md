@@ -4,6 +4,9 @@
 This project was made as part of the weekly programming challenge hosted by [DevJam].
 The project was made for learning purposes. Made by Jeb and mihet05.
 
+[Live Demo](https://keyboard-race.firebaseapp.com/)
+
+
 ## About the Challenge
 #### 🛠 Difficulty Level: Intermediate 
 📅 Start: November 19th<br>
