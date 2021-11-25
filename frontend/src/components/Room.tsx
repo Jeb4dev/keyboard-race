@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useStore } from 'effector-react';
 import { Button, Flex, Heading, Input, Text } from '@chakra-ui/react';
 
 import { IRoom } from '../sockets/context';
 import { useSocket } from '../sockets/useSocket';
 import { leaveRace, startRace } from '../sockets/actions';
 import StopDialog, { formatTime } from './StopDialog';
+import { $users, fetchUser } from '../store/users';
 
 interface RoomProps {
   roomId: number;
@@ -14,6 +16,7 @@ interface RoomProps {
 
 function Room({ room, roomId, isOwner }: RoomProps) {
   const { socket } = useSocket();
+  const users = useStore($users);
   const [time, setTime] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
   const [correctness, setCorrectness] = useState<any>({});
@@ -93,9 +96,6 @@ function Room({ room, roomId, isOwner }: RoomProps) {
 
       {!finished && (
         <>
-          <Text fontSize="2xl" textAlign="left" color="gray">
-            {room.words.words}
-          </Text>
           <Heading textAlign="center">
             {words[wordIndex].split('').map((v, i) => (
               <span
@@ -115,6 +115,19 @@ function Room({ room, roomId, isOwner }: RoomProps) {
             maxLength={words[wordIndex].length}
             isDisabled={!room.started}
           />
+          <Text fontSize="2xl" textAlign="left" color="gray">
+            {room.words.words}
+          </Text>
+          <Heading>Room members</Heading>
+          {room.users.map((v) => {
+            let name = '' + v;
+            if (users[v]) {
+              name = '' + users[v];
+            } else {
+              fetchUser(v);
+            }
+            return <Text>{name}</Text>;
+          })}
         </>
       )}
     </>

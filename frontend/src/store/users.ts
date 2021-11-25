@@ -15,6 +15,7 @@ forward({
 export const $users = createStore<UsersStore>({}).on(fetchUserFx.doneData, (state, result) => {
   if (result !== null) {
     return {
+      ...state,
       [result.id]: result.username,
     };
   }

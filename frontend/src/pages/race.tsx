@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useStore } from 'effector-react';
 import { Heading } from '@chakra-ui/react';
 
@@ -12,6 +12,7 @@ import Room from '../components/Room';
 function RacePage() {
   const account = useStore($account);
   const { socket, rooms } = useSocket();
+  const navigate = useNavigate();
   const params = useParams();
   const userId = parseInt(params.userId || '-1');
 
@@ -27,6 +28,12 @@ function RacePage() {
       }
     }
   }, [socket, userId, rooms, account.id]);
+
+  useEffect(() => {
+    if (account.id === 0) {
+      navigate('/account/login');
+    }
+  }, [account.id]);
 
   useEffect(() => {
     if (socket && userId > 0) {

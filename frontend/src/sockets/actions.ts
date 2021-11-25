@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io-client';
 
 export const getRooms = (socket?: Socket) => {
-  console.log(123);
   socket?.emit('sv_get_active_rooms');
 };
 

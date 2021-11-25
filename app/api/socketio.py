@@ -171,6 +171,7 @@ def join_race(data):
     # Join room
     join_room(room_name)
     emit('cl_join_race')
+    emit('cl_user_should_update_rooms', broadcast=True)
     print(f"{user.username} joined {room_name}!")
 
 
@@ -225,6 +226,7 @@ def start_race():
     active_rooms[user.id]["started"] = True
     active_rooms[user.id]["time_start"] = int(datetime.now(timezone.utc).timestamp() * 1000)
     emit('cl_start_race', to=user.id)
+    emit('cl_user_should_update_rooms', broadcast=True)
     print(f"{user.username} started race!")
 
 
